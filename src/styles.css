@@ -209,6 +209,34 @@ a:focus-visible,
   border-radius: 44px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+}
+
+.card-rotor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 31%, rgba(255, 255, 255, 0.8) 50%, transparent 69%);
+  opacity: 0;
+}
+
+.flashcard.is-flip-closing .card-rotor {
+  animation: card-fold-safe 150ms cubic-bezier(0.55, 0.08, 0.75, 0.25) both;
+}
+
+.flashcard.is-flip-opening .card-rotor {
+  animation: card-unfold-safe 210ms cubic-bezier(0.17, 0.84, 0.38, 1) both;
+}
+
+.flashcard.is-flip-closing .card-rotor::after {
+  animation: card-sheen 150ms ease-in both;
+}
+
+.flashcard.is-flip-opening .card-rotor::after {
+  animation: card-sheen 210ms ease-out reverse both;
 }
 
 .card-face {
@@ -218,7 +246,6 @@ a:focus-visible,
   border-radius: 36px;
   background: var(--paper);
   overflow: hidden;
-  animation: face-in 170ms ease-out both;
 }
 
 .card-face::before {
@@ -336,8 +363,9 @@ a:focus-visible,
 .card-back {
   padding: clamp(24px, 3.2vw, 54px) clamp(28px, 5vw, 88px);
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+  grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
   gap: clamp(10px, 1.6vh, 20px);
+  align-content: start;
   text-align: left;
 }
 
@@ -385,16 +413,16 @@ a:focus-visible,
 
 .definition {
   max-width: 1120px;
-  align-self: center;
+  align-self: start;
   color: var(--ink);
-  font-size: clamp(24px, 3vw, 48px);
-  font-weight: 760;
-  letter-spacing: -0.043em;
-  line-height: 1.18;
+  font-size: clamp(18px, 1.55vw, 26px);
+  font-weight: 620;
+  letter-spacing: -0.028em;
+  line-height: 1.28;
 }
 
 .is-dense .definition {
-  font-size: clamp(20px, 2.35vw, 39px);
+  font-size: clamp(16px, 1.35vw, 22px);
 }
 
 .detail-block {
@@ -436,6 +464,7 @@ a:focus-visible,
 }
 
 .card-back .flip-hint {
+  align-self: end;
   justify-self: center;
   padding-top: 2px;
 }
@@ -826,8 +855,21 @@ a:focus-visible,
   from { opacity: 0; transform: translateY(16px) scale(0.985); }
 }
 
-@keyframes face-in {
-  from { opacity: 0; transform: translateY(5px) scale(0.997); }
+@keyframes card-fold-safe {
+  0% { transform: scaleX(1); filter: brightness(1); }
+  72% { transform: scaleX(0.18) skewY(-0.45deg); filter: brightness(0.94); }
+  100% { transform: scaleX(0.035); filter: brightness(0.88); }
+}
+
+@keyframes card-unfold-safe {
+  0% { transform: scaleX(0.035); filter: brightness(0.88); }
+  38% { transform: scaleX(0.32) skewY(0.35deg); filter: brightness(0.95); }
+  100% { transform: scaleX(1); filter: brightness(1); }
+}
+
+@keyframes card-sheen {
+  0%, 100% { opacity: 0; }
+  55% { opacity: 0.72; }
 }
 
 @media (max-width: 760px) {
@@ -934,7 +976,7 @@ a:focus-visible,
 
   .card-back {
     padding: 17px 18px 14px;
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+    grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
     gap: clamp(7px, 1.35vh, 12px);
   }
 
@@ -957,13 +999,12 @@ a:focus-visible,
   }
 
   .definition {
-    align-self: center;
-    font-size: clamp(18px, 5.6vw, 27px);
-    line-height: 1.16;
+    font-size: clamp(15px, 4vw, 18px);
+    line-height: 1.26;
   }
 
   .is-dense .definition {
-    font-size: clamp(15px, 4.6vw, 22px);
+    font-size: clamp(13px, 3.55vw, 15px);
   }
 
   .detail-block {
@@ -984,13 +1025,13 @@ a:focus-visible,
     min-height: 34px;
     padding: 7px 8px;
     border-radius: 10px;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.25;
   }
 
   .example {
-    font-size: clamp(11px, 3.25vw, 14px);
-    line-height: 1.35;
+    font-size: clamp(12px, 3.5vw, 15px);
+    line-height: 1.4;
   }
 
   .card-back .flip-hint {
@@ -1160,11 +1201,11 @@ a:focus-visible,
   }
 
   .definition {
-    font-size: clamp(16px, 5vw, 22px);
+    font-size: clamp(14px, 4.1vw, 18px);
   }
 
   .is-dense .definition {
-    font-size: clamp(13px, 4vw, 18px);
+    font-size: clamp(12px, 3.6vw, 15px);
   }
 
   .collocations > span {

@@ -76,7 +76,9 @@ export default function App() {
   const [packsOpen, setPacksOpen] = useState(false);
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [speaking, setSpeaking] = useState("");
+  const [flipPhase, setFlipPhase] = useState("idle");
   const audioRef = useRef(null);
+  const flipTimerRef = useRef(null);
 
   const cards = useMemo(() => awl.entries.filter((entry) => entry.sublist === sublistNumber), [sublistNumber]);
   const safeIndex = Math.min(cardIndex, cards.length - 1);
@@ -116,7 +118,7 @@ export default function App() {
       } else if (event.key === " " || event.key === "Enter") {
         if (event.target instanceof HTMLButtonElement) return;
         event.preventDefault();
-        setFlipped((value) => !value);
+        requestFlip();
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -125,17 +127,44 @@ export default function App() {
 
   useEffect(
     () => () => {
+      window.clearTimeout(flipTimerRef.current);
       audioRef.current?.pause();
       speechSynthesis?.cancel();
     },
     []
   );
 
+  function resetCardFace(nextFlipped = false) {
+    window.clearTimeout(flipTimerRef.current);
+    flipTimerRef.current = null;
+    setFlipPhase("idle");
+    setFlipped(nextFlipped);
+  }
+
+  function requestFlip() {
+    if (flipPhase !== "idle") return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setFlipped((value) => !value);
+      return;
+    }
+
+    setFlipPhase("closing");
+    window.clearTimeout(flipTimerRef.current);
+    flipTimerRef.current = window.setTimeout(() => {
+      setFlipped((value) => !value);
+      setFlipPhase("opening");
+      flipTimerRef.current = window.setTimeout(() => {
+        flipTimerRef.current = null;
+        setFlipPhase("idle");
+      }, 210);
+    }, 150);
+  }
+
   function chooseSublist(number) {
     const remembered = number === sublistNumber ? safeIndex : 0;
     setSublistNumber(number);
     setCardIndex(remembered);
-    setFlipped(false);
+    resetCardFace(false);
     setCelebrating(false);
     setPacksOpen(false);
   }
@@ -143,17 +172,17 @@ export default function App() {
   function goPrevious() {
     if (celebrating) {
       setCelebrating(false);
-      setFlipped(true);
+      resetCardFace(true);
       return;
     }
     if (safeIndex > 0) {
       setCardIndex((value) => value - 1);
-      setFlipped(false);
+      resetCardFace(false);
     } else if (sublistNumber > 1) {
       const priorCards = awl.entries.filter((entry) => entry.sublist === sublistNumber - 1);
       setSublistNumber((value) => value - 1);
       setCardIndex(priorCards.length - 1);
-      setFlipped(false);
+      resetCardFace(false);
     }
   }
 
@@ -164,12 +193,12 @@ export default function App() {
     }
     if (safeIndex < cards.length - 1) {
       setCardIndex((value) => value + 1);
-      setFlipped(false);
+      resetCardFace(false);
       return;
     }
     setCompleted((values) => [...new Set([...values, sublistNumber])].sort((a, b) => a - b));
     setCelebrating(true);
-    setFlipped(false);
+    resetCardFace(false);
   }
 
   function continueFromCelebration() {
@@ -177,12 +206,12 @@ export default function App() {
       setSublistNumber((value) => value + 1);
       setCardIndex(0);
       setCelebrating(false);
-      setFlipped(false);
+      resetCardFace(false);
     } else {
       setSublistNumber(1);
       setCardIndex(0);
       setCelebrating(false);
-      setFlipped(false);
+      resetCardFace(false);
     }
   }
 
@@ -254,7 +283,7 @@ export default function App() {
               onReview={() => {
                 setCardIndex(0);
                 setCelebrating(false);
-                setFlipped(false);
+                resetCardFace(false);
               }}
             />
           ) : (
@@ -262,19 +291,20 @@ export default function App() {
               <Spark className="spark-left" />
               <Spark className="spark-right" />
               <div
-                className={`flashcard ${flipped ? "is-flipped" : ""} ${isDense ? "is-dense" : ""}`}
-                onClick={() => setFlipped((value) => !value)}
+                className={`flashcard ${flipped ? "is-flipped" : ""} ${isDense ? "is-dense" : ""} is-flip-${flipPhase}`}
+                onClick={requestFlip}
                 onKeyDown={(event) => {
                   if (event.target !== event.currentTarget) return;
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    setFlipped((value) => !value);
+                    requestFlip();
                   }
                 }}
                 role="button"
                 tabIndex={0}
                 aria-label={flipped ? `Showing details for ${card.word}. Tap to show the word.` : `${card.word}. Tap to show details.`}
                 aria-pressed={flipped}
+                aria-busy={flipPhase !== "idle"}
               >
                 <span className="card-rotor">
                   {!flipped ? (

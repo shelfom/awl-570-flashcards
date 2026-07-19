@@ -1,4 +1,4 @@
-const CACHE = "tb-awl-flashcards-v2-ios-safe";
+const CACHE = "tb-awl-flashcards-v3-safe-flip";
 const CORE = ["/", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
