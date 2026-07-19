@@ -68,6 +68,14 @@ function exampleParts(example, word) {
   return example.split(pattern);
 }
 
+function visualWordWidth(word) {
+  const narrow = { i: 0.6, l: 0.62, t: 0.72, f: 0.72, j: 0.72, r: 0.78 };
+  return [...word.toLowerCase()].reduce((total, letter) => {
+    if (letter === "m" || letter === "w") return total + 1.35;
+    return total + (narrow[letter] || 1);
+  }, 0);
+}
+
 export default function App() {
   const initial = useMemo(readProgress, []);
   const [sublistNumber, setSublistNumber] = useState(initial.sublist);
@@ -88,7 +96,14 @@ export default function App() {
   const progress = ((safeIndex + 1) / cards.length) * 100;
   const globalProgress = card?.id || 1;
   const isDense = (card?.definition.length || 0) + (card?.example.length || 0) > 260;
-  const headwordSize = card?.word.length >= 14 ? "is-very-long" : card?.word.length >= 10 ? "is-long" : "";
+  const headwordSize =
+    card?.word.length >= 14
+      ? "is-very-long"
+      : card?.word.length >= 10
+        ? "is-long"
+        : visualWordWidth(card?.word || "") >= 8.7
+          ? "is-wide"
+          : "";
 
   useEffect(() => {
     if (cardIndex !== safeIndex) setCardIndex(safeIndex);

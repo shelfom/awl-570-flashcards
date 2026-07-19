@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")).render(
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/sw.js?release=v4-visible-flip", { updateViaCache: "none" })
+      .register("/sw.js?release=v5-wide-headwords", { updateViaCache: "none" })
       .then((registration) => registration.update())
       .catch(() => {});
   });
