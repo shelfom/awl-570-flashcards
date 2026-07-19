@@ -1,0 +1,25 @@
+{
+  "name": "tb-awl-flashcards",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "data:build": "node scripts/build-data.mjs",
+    "data:verify": "node scripts/verify-data.mjs",
+    "test": "node scripts/verify-data.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "cheerio": "^1.1.0",
+    "vite": "^7.0.5",
+    "wink-lemmatizer": "^3.0.4"
+  }
+}

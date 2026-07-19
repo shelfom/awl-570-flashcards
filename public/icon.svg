@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="116" fill="#f2efe9"/>
+  <rect x="64" y="68" width="384" height="376" rx="58" fill="#fff" stroke="#111512" stroke-width="16"/>
+  <path d="M64 90h384" stroke="#3e78ff" stroke-width="10"/>
+  <text x="256" y="292" text-anchor="middle" font-family="Arial,sans-serif" font-size="132" font-weight="900" fill="#111512">awl</text>
+  <path d="M403 331l11 26 27 11-27 11-11 27-11-27-27-11 27-11z" fill="#637568"/>
+</svg>
