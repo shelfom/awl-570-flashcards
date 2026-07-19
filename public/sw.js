@@ -1,4 +1,4 @@
-const CACHE = "tb-awl-flashcards-v5-wide-headwords";
+const CACHE = "tb-awl-flashcards-v6-phone-celebration";
 const CORE = ["/", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (event) => {

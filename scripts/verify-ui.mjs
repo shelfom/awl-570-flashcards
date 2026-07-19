@@ -24,7 +24,8 @@ const checks = [
   ["brand is visible", app.includes("海归湾国际教育")],
   ["phone is visible and callable", app.includes('href="tel:4000616820"') && app.includes("400-061-6820")],
   ["mobile footer is not hidden", !/@media \(max-width: 760px\)[\s\S]*?\.footer\s*\{[^}]*display:\s*none/.test(styles)],
-  ["service worker release changed", main.includes("v5-wide-headwords") && worker.includes("v5-wide-headwords")],
+  ["mobile celebration cannot widen the app grid", styles.includes(".topbar,\n.practice,\n.stage,\n.footer {\n  min-width: 0;") && /@media \(max-width: 760px\)[\s\S]*?\.celebration-card h1\s*\{[\s\S]*?max-width:\s*100%;[\s\S]*?font-size:\s*clamp\(34px,\s*11\.2vw,\s*50px\);[\s\S]*?white-space:\s*nowrap;/.test(styles)],
+  ["service worker release changed", main.includes("v6-phone-celebration") && worker.includes("v6-phone-celebration")],
   ["navigation is network-first", worker.includes('event.request.mode === "navigate"') && worker.includes("fetch(event.request)")]
 ];
 
