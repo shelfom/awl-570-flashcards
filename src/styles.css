@@ -224,19 +224,24 @@ a:focus-visible,
 }
 
 .flashcard.is-flip-closing .card-rotor {
-  animation: card-fold-safe 150ms cubic-bezier(0.55, 0.08, 0.75, 0.25) both;
+  animation: card-fold-safe 260ms cubic-bezier(0.55, 0.08, 0.75, 0.25) both;
 }
 
 .flashcard.is-flip-opening .card-rotor {
-  animation: card-unfold-safe 210ms cubic-bezier(0.17, 0.84, 0.38, 1) both;
+  animation: card-unfold-safe 360ms cubic-bezier(0.16, 0.86, 0.3, 1) both;
 }
 
 .flashcard.is-flip-closing .card-rotor::after {
-  animation: card-sheen 150ms ease-in both;
+  animation: card-sheen 260ms ease-in both;
 }
 
 .flashcard.is-flip-opening .card-rotor::after {
-  animation: card-sheen 210ms ease-out reverse both;
+  animation: card-sheen 360ms ease-out reverse both;
+}
+
+.flashcard.is-flip-closing,
+.flashcard.is-flip-opening {
+  pointer-events: none;
 }
 
 .card-face {
@@ -856,20 +861,23 @@ a:focus-visible,
 }
 
 @keyframes card-fold-safe {
-  0% { transform: scaleX(1); filter: brightness(1); }
-  72% { transform: scaleX(0.18) skewY(-0.45deg); filter: brightness(0.94); }
-  100% { transform: scaleX(0.035); filter: brightness(0.88); }
+  0% { transform: scaleX(1) scaleY(1) rotate(0); filter: brightness(1); }
+  38% { transform: scaleX(0.72) scaleY(1.015) rotate(-0.18deg); filter: brightness(0.985); }
+  78% { transform: scaleX(0.2) scaleY(0.97) skewY(-0.55deg); filter: brightness(0.92); }
+  100% { transform: scaleX(0.018) scaleY(0.92); filter: brightness(0.84); }
 }
 
 @keyframes card-unfold-safe {
-  0% { transform: scaleX(0.035); filter: brightness(0.88); }
-  38% { transform: scaleX(0.32) skewY(0.35deg); filter: brightness(0.95); }
-  100% { transform: scaleX(1); filter: brightness(1); }
+  0% { transform: scaleX(0.018) scaleY(0.92); filter: brightness(0.84); }
+  42% { transform: scaleX(0.72) scaleY(1.02) skewY(0.4deg); filter: brightness(0.98); }
+  68% { transform: scaleX(1.035) scaleY(1); filter: brightness(1.01); }
+  86% { transform: scaleX(0.985) scaleY(1); filter: brightness(1); }
+  100% { transform: scaleX(1) scaleY(1); filter: brightness(1); }
 }
 
 @keyframes card-sheen {
   0%, 100% { opacity: 0; }
-  55% { opacity: 0.72; }
+  48% { opacity: 0.9; }
 }
 
 @media (max-width: 760px) {
@@ -975,9 +983,9 @@ a:focus-visible,
   }
 
   .card-back {
-    padding: 17px 18px 14px;
+    padding: 18px 17px 15px;
     grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
-    gap: clamp(7px, 1.35vh, 12px);
+    gap: clamp(9px, 1.7vh, 14px);
   }
 
   .back-word {
@@ -1001,6 +1009,7 @@ a:focus-visible,
   .definition {
     font-size: clamp(15px, 4vw, 18px);
     line-height: 1.26;
+    padding: 2px 0 4px;
   }
 
   .is-dense .definition {
@@ -1008,13 +1017,15 @@ a:focus-visible,
   }
 
   .detail-block {
-    padding-top: 8px;
-    grid-template-columns: 1fr;
-    gap: 6px;
+    padding-top: 10px;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 12px;
   }
 
   .detail-label {
     font-size: 8px;
+    line-height: 1.45;
+    padding-top: 4px;
   }
 
   .collocations {
@@ -1025,12 +1036,12 @@ a:focus-visible,
     min-height: 34px;
     padding: 7px 8px;
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.25;
   }
 
   .example {
-    font-size: clamp(12px, 3.5vw, 15px);
+    font-size: clamp(12px, 3.35vw, 14px);
     line-height: 1.4;
   }
 
@@ -1197,7 +1208,7 @@ a:focus-visible,
 
   .card-back {
     padding: 12px 15px 10px;
-    gap: 6px;
+    gap: 8px;
   }
 
   .definition {
@@ -1209,7 +1220,7 @@ a:focus-visible,
   }
 
   .collocations > span {
-    min-height: 29px;
+    min-height: 31px;
     padding: 5px 7px;
   }
 
@@ -1226,5 +1237,15 @@ a:focus-visible,
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .flashcard.is-flip-closing .card-rotor,
+  .flashcard.is-flip-closing .card-rotor::after {
+    animation-duration: 260ms !important;
+  }
+
+  .flashcard.is-flip-opening .card-rotor,
+  .flashcard.is-flip-opening .card-rotor::after {
+    animation-duration: 360ms !important;
   }
 }

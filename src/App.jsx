@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import awl from "./data/awl.json";
 
 const STORAGE_KEY = "tb-awl-570-progress-v1";
+const FLIP_CLOSE_MS = 260;
+const FLIP_OPEN_MS = 360;
 const PEP_TALKS = [
   ["Frequency first", "You have cleared the most useful academic words. That is a serious head start."],
   ["Two lists down", "The language of lectures and essays is already getting easier to recognise."],
@@ -143,11 +145,6 @@ export default function App() {
 
   function requestFlip() {
     if (flipPhase !== "idle") return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setFlipped((value) => !value);
-      return;
-    }
-
     setFlipPhase("closing");
     window.clearTimeout(flipTimerRef.current);
     flipTimerRef.current = window.setTimeout(() => {
@@ -156,8 +153,8 @@ export default function App() {
       flipTimerRef.current = window.setTimeout(() => {
         flipTimerRef.current = null;
         setFlipPhase("idle");
-      }, 210);
-    }, 150);
+      }, FLIP_OPEN_MS);
+    }, FLIP_CLOSE_MS);
   }
 
   function chooseSublist(number) {
