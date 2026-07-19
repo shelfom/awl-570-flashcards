@@ -346,7 +346,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <span>Turtle Bay English</span>
+        <span>海归湾国际教育</span>
         <button onClick={() => setSourcesOpen(true)}>CC BY-SA learning resource</button>
       </footer>
 
