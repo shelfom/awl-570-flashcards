@@ -84,6 +84,7 @@ export default function App() {
   const progress = ((safeIndex + 1) / cards.length) * 100;
   const globalProgress = card?.id || 1;
   const isDense = (card?.definition.length || 0) + (card?.example.length || 0) > 260;
+  const headwordSize = card?.word.length >= 14 ? "is-very-long" : card?.word.length >= 10 ? "is-long" : "";
 
   useEffect(() => {
     if (cardIndex !== safeIndex) setCardIndex(safeIndex);
@@ -276,55 +277,59 @@ export default function App() {
                 aria-pressed={flipped}
               >
                 <span className="card-rotor">
-                  <span className="card-face card-front" aria-hidden={flipped}>
-                    <span className="front-kicker">academic word</span>
-                    <span className="headword">{card.word}</span>
-                    <span className="audio-row">
-                      <button
-                        type="button"
-                        className={`audio-button ${speaking === "uk" ? "is-speaking" : ""}`}
-                        onClick={(event) => playPronunciation("uk", event)}
-                        aria-label={`Play British pronunciation of ${card.word}`}
-                      >
-                        <span>UK</span>
-                        <SpeakerIcon />
-                      </button>
-                      <button
-                        type="button"
-                        className={`audio-button ${speaking === "us" ? "is-speaking" : ""}`}
-                        onClick={(event) => playPronunciation("us", event)}
-                        aria-label={`Play American pronunciation of ${card.word}`}
-                      >
-                        <span>US</span>
-                        <SpeakerIcon />
-                      </button>
-                    </span>
-                    <span className="flip-hint">tap the card to reveal</span>
-                  </span>
-
-                  <span className="card-face card-back" aria-hidden={!flipped}>
-                    <span className="back-topline">
-                      <span className="back-word">{card.word}</span>
-                      <span className="part-of-speech">{card.partOfSpeech || "academic English"}</span>
-                    </span>
-                    <span className="chinese">{card.chinese}</span>
-                    <span className="definition">{card.definition}</span>
-                    <span className="detail-block collocation-block">
-                      <span className="detail-label">common collocations</span>
-                      <span className="collocations">
-                        {card.collocations.map((item) => <span key={item}>{item}</span>)}
+                  {!flipped ? (
+                    <span className="card-face card-front" key={`front-${card.id}`}>
+                      <span className="front-kicker">academic word</span>
+                      <span className="front-center">
+                        <span className={`headword ${headwordSize}`}>{card.word}</span>
+                        <span className="audio-row">
+                          <button
+                            type="button"
+                            className={`audio-button ${speaking === "uk" ? "is-speaking" : ""}`}
+                            onClick={(event) => playPronunciation("uk", event)}
+                            aria-label={`Play British pronunciation of ${card.word}`}
+                          >
+                            <span>UK</span>
+                            <SpeakerIcon />
+                          </button>
+                          <button
+                            type="button"
+                            className={`audio-button ${speaking === "us" ? "is-speaking" : ""}`}
+                            onClick={(event) => playPronunciation("us", event)}
+                            aria-label={`Play American pronunciation of ${card.word}`}
+                          >
+                            <span>US</span>
+                            <SpeakerIcon />
+                          </button>
+                        </span>
                       </span>
+                      <span className="flip-hint">tap the card to reveal</span>
                     </span>
-                    <span className="detail-block example-block">
-                      <span className="detail-label">in context</span>
-                      <span className="example">
-                        {exampleParts(card.example, card.word).map((part, index) =>
-                          index % 2 === 1 ? <strong key={`${part}-${index}`}>{part}</strong> : <span key={`${part}-${index}`}>{part}</span>
-                        )}
+                  ) : (
+                    <span className="card-face card-back" key={`back-${card.id}`}>
+                      <span className="back-topline">
+                        <span className="back-word">{card.word}</span>
+                        <span className="part-of-speech">{card.partOfSpeech || "academic English"}</span>
                       </span>
+                      <span className="chinese">{card.chinese}</span>
+                      <span className="definition">{card.definition}</span>
+                      <span className="detail-block collocation-block">
+                        <span className="detail-label">common collocations</span>
+                        <span className="collocations">
+                          {card.collocations.map((item) => <span key={item}>{item}</span>)}
+                        </span>
+                      </span>
+                      <span className="detail-block example-block">
+                        <span className="detail-label">in context</span>
+                        <span className="example">
+                          {exampleParts(card.example, card.word).map((part, index) =>
+                            index % 2 === 1 ? <strong key={`${part}-${index}`}>{part}</strong> : <span key={`${part}-${index}`}>{part}</span>
+                          )}
+                        </span>
+                      </span>
+                      <span className="flip-hint">tap to see the word</span>
                     </span>
-                    <span className="flip-hint">tap to see the word</span>
-                  </span>
+                  )}
                 </span>
               </div>
             </>
@@ -346,7 +351,10 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <span>海归湾国际教育</span>
+        <span className="footer-brand">海归湾国际教育</span>
+        <a className="footer-phone" href="tel:4000616820" aria-label="Call 海归湾国际教育 at 400-061-6820">
+          400-061-6820
+        </a>
         <button onClick={() => setSourcesOpen(true)}>CC BY-SA learning resource</button>
       </footer>
 

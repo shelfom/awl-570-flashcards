@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "data:build": "node scripts/build-data.mjs",
     "data:verify": "node scripts/verify-data.mjs",
-    "test": "node scripts/verify-data.mjs"
+    "test": "node scripts/verify-data.mjs && node scripts/verify-ui.mjs"
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.2.8",

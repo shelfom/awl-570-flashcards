@@ -12,6 +12,9 @@ createRoot(document.getElementById("root")).render(
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js?release=v1").catch(() => {});
+    navigator.serviceWorker
+      .register("/sw.js?release=v2-ios-safe", { updateViaCache: "none" })
+      .then((registration) => registration.update())
+      .catch(() => {});
   });
 }

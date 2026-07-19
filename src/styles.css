@@ -183,7 +183,6 @@ a:focus-visible,
 .stage {
   position: relative;
   min-height: 0;
-  perspective: 1800px;
   isolation: isolate;
 }
 
@@ -199,7 +198,6 @@ a:focus-visible,
   border-radius: 44px;
   background: transparent;
   cursor: pointer;
-  perspective: 1800px;
 }
 
 .card-rotor {
@@ -210,12 +208,7 @@ a:focus-visible,
   border: 3px solid var(--blue);
   border-radius: 44px;
   box-shadow: var(--shadow);
-  transform-style: preserve-3d;
-  transition: transform 560ms cubic-bezier(0.2, 0.78, 0.2, 1);
-}
-
-.flashcard.is-flipped .card-rotor {
-  transform: rotateY(180deg);
+  overflow: hidden;
 }
 
 .card-face {
@@ -224,8 +217,8 @@ a:focus-visible,
   border: 2px solid var(--ink);
   border-radius: 36px;
   background: var(--paper);
-  backface-visibility: hidden;
   overflow: hidden;
+  animation: face-in 170ms ease-out both;
 }
 
 .card-face::before {
@@ -240,9 +233,20 @@ a:focus-visible,
 
 .card-front {
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   place-items: center;
   padding: clamp(24px, 3vw, 52px);
+}
+
+.front-center {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 0;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  gap: clamp(24px, 4vh, 46px);
 }
 
 .front-kicker,
@@ -261,23 +265,28 @@ a:focus-visible,
 .headword {
   position: relative;
   z-index: 1;
-  align-self: end;
   max-width: 94%;
   color: var(--ink);
   font-size: clamp(72px, 10.4vw, 176px);
   font-weight: 880;
   letter-spacing: -0.075em;
   line-height: 0.92;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+}
+
+.headword.is-long {
+  font-size: clamp(58px, 8.3vw, 135px);
+}
+
+.headword.is-very-long {
+  font-size: clamp(48px, 6.7vw, 110px);
 }
 
 .audio-row {
   position: relative;
   z-index: 3;
-  align-self: start;
   display: flex;
   gap: 12px;
-  margin-top: clamp(26px, 4vh, 46px);
 }
 
 .audio-button {
@@ -330,7 +339,6 @@ a:focus-visible,
   grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
   gap: clamp(10px, 1.6vh, 20px);
   text-align: left;
-  transform: rotateY(180deg);
 }
 
 .back-topline,
@@ -527,6 +535,16 @@ a:focus-visible,
   letter-spacing: inherit;
   text-transform: inherit;
   cursor: pointer;
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-phone {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
 }
 
 .celebration-card {
@@ -808,11 +826,15 @@ a:focus-visible,
   from { opacity: 0; transform: translateY(16px) scale(0.985); }
 }
 
+@keyframes face-in {
+  from { opacity: 0; transform: translateY(5px) scale(0.997); }
+}
+
 @media (max-width: 760px) {
   .app-shell {
     padding: max(12px, env(safe-area-inset-top)) 13px max(10px, env(safe-area-inset-bottom));
-    grid-template-rows: 49px minmax(0, 1fr);
-    gap: 6px;
+    grid-template-rows: 45px minmax(0, 1fr) 20px;
+    gap: 5px;
   }
 
   .topbar {
@@ -874,6 +896,10 @@ a:focus-visible,
     padding: 22px 16px 18px;
   }
 
+  .front-center {
+    gap: 22px;
+  }
+
   .front-kicker {
     font-size: 9px;
   }
@@ -884,9 +910,16 @@ a:focus-visible,
     letter-spacing: -0.075em;
   }
 
+  .headword.is-long {
+    font-size: clamp(34px, 10.8vw, 56px);
+  }
+
+  .headword.is-very-long {
+    font-size: clamp(30px, 8.8vw, 46px);
+  }
+
   .audio-row {
     gap: 8px;
-    margin-top: 22px;
   }
 
   .audio-button {
@@ -983,6 +1016,24 @@ a:focus-visible,
   }
 
   .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 0;
+    color: #777d76;
+    font-size: 9px;
+    font-weight: 720;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .footer-brand,
+  .footer-phone {
+    display: inline;
+  }
+
+  .footer button {
     display: none;
   }
 
@@ -1075,7 +1126,7 @@ a:focus-visible,
   .app-shell {
     padding-top: max(8px, env(safe-area-inset-top));
     padding-bottom: max(7px, env(safe-area-inset-bottom));
-    grid-template-rows: 42px minmax(0, 1fr);
+    grid-template-rows: 42px minmax(0, 1fr) 18px;
   }
 
   .practice {
@@ -1097,10 +1148,6 @@ a:focus-visible,
 
   .headword {
     font-size: clamp(44px, 16vw, 68px);
-  }
-
-  .audio-row {
-    margin-top: 15px;
   }
 
   .audio-button {
