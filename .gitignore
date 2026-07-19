@@ -5,3 +5,5 @@ scripts/.cache/
 
 # Preview files
 .preview
+.cozeproj/reduction
+.codegraph
