@@ -394,9 +394,15 @@ export default function App() {
 
       <footer className="footer">
         <span className="footer-brand">海归湾国际教育</span>
-        <a className="footer-phone" href="tel:4000616820" aria-label="Call 海归湾国际教育 at 400-061-6820">
-          400-061-6820
-        </a>
+        <span className="tb-phones">
+          <a className="footer-phone" href="tel:4000616820" data-who="400" aria-label="Call 海归湾国际教育 at 400-061-6820">
+            400-061-6820
+          </a>
+          <span className="tb-mobiles">
+            <a className="footer-phone tb-handset" href="tel:18612530608" data-who="Stephanie">186 1253 0608</a>
+            <a className="footer-phone" href="tel:13803039029" data-who="Maggie">138 0303 9029</a>
+          </span>
+        </span>
         <button onClick={() => setSourcesOpen(true)}>CC BY-SA learning resource</button>
       </footer>
 
